@@ -1,0 +1,12 @@
+---
+- name: Step 1 - Adding jira docker-compose to tmp folder
+  become: true
+  template:
+    src: jira-docker-compose.j2
+    dest: "/tmp/jira-docker-compose.yml"
+
+- name: Step 2 - Run `jira-docker-compose up -d`
+  become: true
+  shell: docker-compose -f jira-docker-compose.yml up -d
+  args:
+    chdir: /tmp

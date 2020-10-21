@@ -1,0 +1,12 @@
+---
+- name: Step 1 - Adding yum docker repo
+  become: true
+  template:
+    src: docker.j2
+    dest: "/etc/yum.repos.d/docker.repo"
+
+- name: Step 2 - Adding yum rhel repo
+  become: true
+  template:
+    src: rhel7repos.j2
+    dest: "/etc/yum.repos.d/rhel_7_updates.repo"

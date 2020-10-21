@@ -1,0 +1,32 @@
+---
+- name: Step 1 - Adding artifactory docker-compose to tmp folder
+  become: true
+  template:
+    src: artifactory-docker-compose.j2
+    dest: "/tmp/artifactory-docker-compose.yml"
+
+- name: Step 2 - Create '/data/artifactory' directory and recursively change ownership of it
+  become: true
+  file:
+    path: /data/artifactory
+    state: directory
+    recurse: yes
+    owner: root
+    group: root
+    mode: '777'
+
+- name: Step 3 - Create '/var/opt/jfrog/artifactory/' directory and recursively change ownership of it
+  become: true
+  file:
+    path: /var/opt/jfrog/artifactory/
+    state: directory
+    recurse: yes
+    owner: root
+    group: root
+    mode: '777'
+
+- name: Step 3 - Run `artifactory-docker-compose up -d`
+  become: true
+  shell: docker-compose -f artifactory-docker-compose.yml up -d
+  args:
+    chdir: /tmp

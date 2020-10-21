@@ -1,0 +1,17 @@
+#
+# To run any of the examples, you should execute:
+# docker-compose -f jira-docker-compose.yml up -d
+#
+version: '3'
+services:
+  jira:
+    image: atlassian/jira-software
+    container_name: jira
+    ports:
+      - 8080:8080
+    restart: always
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 32000
+        hard: 40000

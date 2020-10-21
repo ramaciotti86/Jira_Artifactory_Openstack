@@ -1,0 +1,8 @@
+---
+- hosts: ECDE_3PP
+  roles: [
+  common/yum_repos,
+  common/docker_install,
+  common/jira_install,
+  common/artifactory_install
+  ]

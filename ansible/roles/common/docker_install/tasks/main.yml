@@ -1,0 +1,74 @@
+---
+- name: Step 1 - Yum install container-selinux
+  become: true
+  become_user: root
+  yum:
+    name: http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.107-3.el7.noarch.rpm
+    state: present
+
+- name: Step 2 - Yum install docker-ce
+  become: true
+  become_user: root
+  yum:
+    name: docker-ce
+
+- name: Step 3 - Yum install docker-ce-cli
+  become: true
+  become_user: root
+  yum:
+    name: docker-ce-cli
+
+- name: Step 3 - Yum install containerd.io
+  become: true
+  become_user: root
+  yum:
+    name: containerd.io
+
+- name: Step 4 - Create "docker" group
+  become: true
+  become_user: root
+  group:
+    name: "{{ docker_group }}"
+    state: present
+
+- name: Step 5 - Add remote "cloud-user" user to "docker" group
+  become: true
+  become_user: root
+  user:
+    name: "{{ remote_user }}"
+    group: "{{ docker_group }}"
+    append: yes
+
+- name: Step 6 - Start docker on boot
+  become: true
+  become_user: root
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Step 7 - Enable the Docker daemon in systemd
+  become: true
+  become_user: root
+  systemd:
+    name: docker
+    enabled: yes
+    masked: no
+
+- name: Step 8 - Check if Docker Compose is installed
+  become: true
+  become_user: root
+  command: docker-compose --version
+  register: docker_compose_check
+  ignore_errors: yes
+
+- name: Step 9 - Download and install Docker Compose
+  become: true
+  become_user: root
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.21.2/docker-compose-Linux-x86_64
+    dest: /usr/bin/docker-compose
+    mode: 0755
+  when:
+    - docker_compose_check.msg is defined
+    - docker_compose_check.msg.find('No such file or directory') != -1
