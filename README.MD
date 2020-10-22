@@ -1,4 +1,4 @@
-# Jira and Artifactory on Openstack
+# Jira and Artifactory on Openstack with Terraform and Ansible
 
 ## Instance creation using Terraform
 To install Base Image with Jira and Artifactory containers on it, please use terraform with the commands below
