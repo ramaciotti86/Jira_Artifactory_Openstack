@@ -54,5 +54,5 @@ variable "base_image" {
 
 ############################### Openstack Flavor ###############################
 variable "flavor" {
-  description = "ECDE Flavor name"
+  description = "Flavor name"
 }
